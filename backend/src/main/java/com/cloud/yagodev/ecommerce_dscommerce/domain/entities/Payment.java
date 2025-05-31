@@ -11,6 +11,8 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant moment;
 
     @OneToOne
@@ -29,10 +31,6 @@ public class Payment {
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public Instant getMoment() {

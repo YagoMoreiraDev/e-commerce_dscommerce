@@ -40,10 +40,6 @@ public class Order {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public Instant getMoment() {
         return moment;
     }
