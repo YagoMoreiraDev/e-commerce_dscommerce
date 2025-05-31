@@ -22,18 +22,26 @@ public class Order {
     @JoinColumn(name = "col_client_id")
     private User client;
 
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL)
+    private Payment payment;
+
     public Order() {
     }
 
-    public Order(String id, Instant moment, OrderStatus status, User client) {
+    public Order(String id, Instant moment, OrderStatus status, User client, Payment payment) {
         this.id = id;
         this.moment = moment;
         this.status = status;
         this.client = client;
+        this.payment = payment;
     }
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Instant getMoment() {
@@ -60,6 +68,14 @@ public class Order {
         this.client = client;
     }
 
+    public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -67,6 +83,7 @@ public class Order {
                 ", moment=" + moment +
                 ", status=" + status +
                 ", client=" + client +
+                ", payment=" + payment +
                 '}';
     }
 }
