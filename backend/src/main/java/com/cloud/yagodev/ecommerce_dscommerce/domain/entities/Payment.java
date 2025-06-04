@@ -9,8 +9,8 @@ import java.time.Instant;
 public class Payment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant moment;
@@ -23,13 +23,13 @@ public class Payment {
     public Payment() {
     }
 
-    public Payment(String id, Instant moment, Order order) {
+    public Payment(Long id, Instant moment, Order order) {
         this.id = id;
         this.moment = moment;
         this.order = order;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 

@@ -3,6 +3,7 @@ package com.cloud.yagodev.ecommerce_dscommerce.domain.entities;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -10,8 +11,8 @@ import java.util.Set;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(length = 80, nullable = false)
     private String name;
@@ -30,10 +31,13 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
 
+    @OneToMany(mappedBy = "id.product")
+    private Set<OrderItem> orderItems = new HashSet<>();
+
     public Product() {
     }
 
-    public Product(String id, String name, String description, Double price, String imgUrl) {
+    public Product(Long id, String name, String description, Double price, String imgUrl) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -41,7 +45,7 @@ public class Product {
         this.imgUrl = imgUrl;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
@@ -79,6 +83,15 @@ public class Product {
 
     public Set<Category> getCategories() {
         return categories;
+    }
+
+    public Set<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+
+    //
+    public List<Order> getOrders() {
+        return orderItems.stream().map(x -> x.getOrder()).toList();
     }
 
     @Override
