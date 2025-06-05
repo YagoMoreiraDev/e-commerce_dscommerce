@@ -5,6 +5,8 @@ import com.cloud.yagodev.ecommerce_dscommerce.domain.dtos.ProductResponseDTO;
 import com.cloud.yagodev.ecommerce_dscommerce.domain.entities.Product;
 import com.cloud.yagodev.ecommerce_dscommerce.domain.repositories.ProductRepository;
 import com.cloud.yagodev.ecommerce_dscommerce.domain.services.ProductService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +27,8 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductResponseDTO> buscarTodos() {
-        return service.buscarTodos();
+    public Page<ProductResponseDTO> buscarTodos(Pageable pageable) {
+        return service.buscarTodos(pageable);
     }
 
     @PostMapping

@@ -4,6 +4,8 @@ import com.cloud.yagodev.ecommerce_dscommerce.domain.dtos.ProductRequestDTO;
 import com.cloud.yagodev.ecommerce_dscommerce.domain.dtos.ProductResponseDTO;
 import com.cloud.yagodev.ecommerce_dscommerce.domain.entities.Product;
 import com.cloud.yagodev.ecommerce_dscommerce.domain.repositories.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,10 +27,9 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductResponseDTO> buscarTodos() {
-        List<Product> productList = repository.findAll();
-        return productList.stream()
-                .map(item -> new ProductResponseDTO(item)).toList();
+    public Page<ProductResponseDTO> buscarTodos(Pageable pageable) {
+        Page<Product> productList = repository.findAll(pageable);
+        return productList.map(item -> new ProductResponseDTO(item));
     }
 
     @Transactional
