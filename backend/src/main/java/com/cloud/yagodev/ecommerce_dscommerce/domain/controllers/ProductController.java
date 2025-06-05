@@ -2,14 +2,14 @@ package com.cloud.yagodev.ecommerce_dscommerce.domain.controllers;
 
 import com.cloud.yagodev.ecommerce_dscommerce.domain.dtos.ProductRequestDTO;
 import com.cloud.yagodev.ecommerce_dscommerce.domain.dtos.ProductResponseDTO;
-import com.cloud.yagodev.ecommerce_dscommerce.domain.entities.Product;
-import com.cloud.yagodev.ecommerce_dscommerce.domain.repositories.ProductRepository;
 import com.cloud.yagodev.ecommerce_dscommerce.domain.services.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.List;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/products")
@@ -22,17 +22,34 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ProductResponseDTO buscarPorId(@PathVariable Long id) {
-        return service.buscarPorId(id);
+    public ResponseEntity<ProductResponseDTO> buscarPorId(@PathVariable Long id) {
+        ProductResponseDTO dto = service.buscarPorId(id);
+
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping
-    public Page<ProductResponseDTO> buscarTodos(Pageable pageable) {
-        return service.buscarTodos(pageable);
+    public ResponseEntity<Page<ProductResponseDTO>> buscarTodos(Pageable pageable) {
+        Page<ProductResponseDTO> productResponseDtoList = service.buscarTodos(pageable);
+
+        return ResponseEntity.ok(productResponseDtoList);
     }
 
     @PostMapping
-    public ProductResponseDTO criarNovo(@RequestBody ProductRequestDTO productRequestDTO) {
-        return service.criarNovoProduto(productRequestDTO);
+    public ResponseEntity<ProductResponseDTO> criarNovo(@RequestBody ProductRequestDTO productRequestDTO) {
+        var responseDTO = service.criarNovoProduto(productRequestDTO);
+        URI uri = ServletUriComponentsBuilder
+                .fromCurrentRequestUri()
+                .path("/{id}")
+                .buildAndExpand(responseDTO.id())
+                .toUri();
+        return ResponseEntity.created(uri).body(responseDTO);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProductResponseDTO> atualizaProduto(@PathVariable Long id, @RequestBody ProductRequestDTO requestDTO) {
+        var responseDTO = service.atualizarProduto(id, requestDTO);
+
+        return ResponseEntity.ok(responseDTO);
     }
 }
